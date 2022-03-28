@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=windows-1251">
+     
+ 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+ 
+  <title>datatable</title>
+   
+      <script>
+        $(document).ready(function(){
+
+		var username="someusername";
+		var password="somepasswd";
+		var table = $('#data-table').DataTable({
+			"ajax":{
+  				type: "GET",
+  				url: "http://someserver/dbname/hs/servicename/tv/nku_sklad",
+  				dataType: 'json',
+				beforeSend: function (xhr) {
+    					xhr.setRequestHeader ("Authorization", "Basic " + btoa(username + ":" + password));
+				},
+				"dataSrc": ""
+			},
+  			"columns": [
+				{"data" : "Num"},
+                	{"data" : "Poluchatel"},
+                	{"data" : "NKU"},
+                	{"data" : "ZakazKontragent"},
+				{"data" : "ZakazNum"}
+                ]
+            	
+		}); 
+
+ 		setInterval(
+			function () { 
+				table.ajax.reload(); 
+			}, 10000 
+		);           
+             
+        });
+ 
+    </script>
+</head>
+<body>
+ 
+ <table id="data-table" class="table table-bordered" width="100%">
+  <thead>
+    <tr>
+      <th>Заявка</th>
+      <th>Получатель</th>
+      <th>НКУ</th>
+      <th>Контрагент</th>
+      <th>Номер заказа</th>
+    </tr>
+  </thead>
+ 
+ 
+ </table>
+  
+</body>
+ 
