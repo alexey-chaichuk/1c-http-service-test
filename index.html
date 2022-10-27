@@ -15,36 +15,54 @@
       <script>
         $(document).ready(function(){
 
-		var username="usr";
-		var password="pwd";
+		var username="obmen";
+		var password="Obmen1234";
 		var table = $('#data-table').DataTable({
 			"ajax":{
   				type: "GET",
-  				url: "http://servername/dbname/hs/mu1/tv/nku_sklad",
+  				url: "http://erp.drive.local/first/hs/mu1/tv/nku_sklad",
   				dataType: 'json',
 				beforeSend: function (xhr) {
     					xhr.setRequestHeader ("Authorization", "Basic " + btoa(username + ":" + password));
 				},
 				"dataSrc": ""
 			},
-			"pageLength": 20,
+			"pageLength": 25,
   			"columns": [
-				{"data" : "Num"},
-				{"data" : "Date"},
-	                	{"data" : "Zatreboval"},
-        	        	{"data" : "Project"},
-                	]
+				{ "data": "Num" },
+				{ "data": "Date" },
+                	{ "data": "Zatreboval" },
+                	{ "data": "Comment" },
+				{ "data": "SostoyanieSborki" },
+                ],
+
+			"rowCallback": function(row, data, displayNum, displayIndex, dataIndex) {
+			   var SostoyanieSborki = data.SostoyanieSborki
+			   if (SostoyanieSborki === 'Собран') {
+                     $('td', row).css('background-color', 'lightgreen')
+			   } else if (SostoyanieSborki === 'В процессе сборки') {
+   		          $('td', row).css('background-color', 'yellow')
+			  }
+			}
+
             	
 		}); 
 
  		setInterval(
 			function () { 
 				table.ajax.reload(); 
-			}, 10000 
-		);           
-             
-        });
- 
+			}, 200000 
+		);   
+
+		setInterval(
+			function(){ 
+				var info = table.page.info();
+				var pageNum = (info.page < info.pages) ? info.page + 1 : 1;
+				table.page(pageNum).draw(false);    
+			}, 15000
+		);   
+                     
+       }); 
     </script>
 </head>
 <body>
@@ -55,7 +73,8 @@
       <th>Номер ТН</th>
       <th>Дата ТН</th>
       <th>Затребовал</th>
-      <th>Проект</th>
+      <th>Комментарий</th>
+      <th>Состояние</th>
     </tr>
   </thead>
  
@@ -63,4 +82,3 @@
  </table>
   
 </body>
- 
